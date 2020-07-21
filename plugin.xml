@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.fumi.imagePicker" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>ImagePicker</name>
+    <js-module name="ImagePicker" src="www/ImagePicker.js">
+        <clobbers target="cordova.plugins.ImagePicker"/>
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="ImagePicker">
+                <param name="android-package" value="com.fumi.imagePicker.ImagePicker"/>
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <activity android:name=".ImageActivity" />
+        </config-file>
+        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImageActivity.java" target-dir="src/com/fumi/imagePicker"/>
+
+        <source-file src="src/res/layout/layout_image_activity.xml" target-dir="res/layout" />
+    </platform>
+
+    <platform name="ios">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="ImagePicker">
+                <param name="android-package" value="com.fumi.imagePicker.ImagePicker"/>
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <activity android:name=".ImageActivity" />
+        </config-file>
+        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImageActivity.java" target-dir="src/com/fumi/imagePicker"/>
+
+        <source-file src="src/res/layout/layout_image_activity.xml" target-dir="res/layout" />
+    </platform>
+</plugin>

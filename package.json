@@ -1,0 +1,17 @@
+{
+  "name": "com.fumi.imagePicker",
+  "version": "0.0.1",
+  "description": "",
+  "cordova": {
+    "id": "com.fumi.imagePicker",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "",
+  "license": "ISC"
+}
