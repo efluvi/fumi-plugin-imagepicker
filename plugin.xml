@@ -10,28 +10,39 @@
             <feature name="ImagePicker">
                 <param name="android-package" value="com.fumi.imagePicker.ImagePicker"/>
             </feature>
+
         </config-file>
+
+        <source-file src="src/res/layout/picker_activity.xml" target-dir="res/layout" />
+        <source-file src="src/res/layout/grid_item.xml" target-dir="res/layout" />
+        <source-file src="src/res/drawable/black_circle.xml" target-dir="res/drawable" />
+        <source-file src="src/res/drawable/check.png" target-dir="res/drawable" />
+        <source-file src="src/res/drawable/multi.png" target-dir="res/drawable" />
+        <source-file src="src/res/drawable/rotate.png" target-dir="res/drawable" />
+        <source-file src="src/res/drawable/selector_circle.xml" target-dir="res/drawable" />
+        <source-file src="src/res/drawable/snap.png" target-dir="res/drawable" />
+        <source-file src="src/res/menu/action_bar.xml" target-dir="res/menu" />
+
         <config-file parent="/*" target="AndroidManifest.xml">
-            <activity android:name=".ImageActivity" />
-        </config-file>
-        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/imagePicker"/>
-        <source-file src="src/android/ImageActivity.java" target-dir="src/com/fumi/imagePicker"/>
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-        <source-file src="src/res/layout/layout_image_activity.xml" target-dir="res/layout" />
-    </platform>
+            <activity android:name=".PickerActivity" />
+            <activity android:name=".ViewerActivity" />
 
-    <platform name="ios">
-        <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="ImagePicker">
-                <param name="android-package" value="com.fumi.imagePicker.ImagePicker"/>
-            </feature>
         </config-file>
-        <config-file parent="/*" target="AndroidManifest.xml">
-            <activity android:name=".ImageActivity" />
-        </config-file>
-        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/imagePicker"/>
-        <source-file src="src/android/ImageActivity.java" target-dir="src/com/fumi/imagePicker"/>
 
-        <source-file src="src/res/layout/layout_image_activity.xml" target-dir="res/layout" />
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+
+
+
+        <source-file src="src/android/PickerActivity.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ImagePickerBitmapLoader.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ImagePickerGridItem.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ImagePickerGridView.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ImagePickerUtil.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/ViewerActivity.java" target-dir="src/com/fumi/ImagePicker"/>
     </platform>
 </plugin>
