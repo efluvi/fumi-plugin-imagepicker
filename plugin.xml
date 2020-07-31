@@ -37,12 +37,12 @@
 
 
 
-        <source-file src="src/android/PickerActivity.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ImagePickerBitmapLoader.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ImagePickerGridItem.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ImagePickerGridView.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ImagePickerUtil.java" target-dir="src/com/fumi/ImagePicker"/>
-        <source-file src="src/android/ViewerActivity.java" target-dir="src/com/fumi/ImagePicker"/>
+        <source-file src="src/android/PickerActivity.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImagePicker.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImagePickerBitmapLoader.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImagePickerGridItem.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImagePickerGridView.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ImagePickerUtil.java" target-dir="src/com/fumi/imagePicker"/>
+        <source-file src="src/android/ViewerActivity.java" target-dir="src/com/fumi/imagePicker"/>
     </platform>
 </plugin>
