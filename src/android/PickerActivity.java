@@ -160,18 +160,17 @@ public class PickerActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.next_btn:
-
-                progressBar.setVisibility(View.VISIBLE);
-                uploadImages();
-                return true;
-            case R.id.test_btn:
-                Intent intent1 = new Intent(this, ViewerActivity.class);
-                startActivity(intent1);
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.next_btn) {
+            progressBar.setVisibility(View.VISIBLE);
+            uploadImages();
+            return true;
+        } else if (itemId == R.id.test_btn) {
+            Intent intent1 = new Intent(this, ViewerActivity.class);
+            startActivity(intent1);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkPermission() {

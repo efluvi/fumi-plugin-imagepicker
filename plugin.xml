@@ -13,6 +13,17 @@
 
         </config-file>
 
+        <config-file  target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <activity android:name="com.fumi.imagePicker.PickerActivity" />
+            <activity android:name="com.fumi.imagePicker.ViewerActivity" />
+        </config-file>
+
         <source-file src="src/res/layout/picker_activity.xml" target-dir="res/layout" />
         <source-file src="src/res/layout/grid_item.xml" target-dir="res/layout" />
         <source-file src="src/res/drawable/black_circle.xml" target-dir="res/drawable" />
@@ -23,15 +34,7 @@
         <source-file src="src/res/drawable/snap.png" target-dir="res/drawable" />
         <source-file src="src/res/menu/action_bar.xml" target-dir="res/menu" />
 
-        <config-file parent="/*" target="AndroidManifest.xml">
-            <uses-permission android:name="android.permission.INTERNET"/>
-            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-            <activity android:name=".PickerActivity" />
-            <activity android:name=".ViewerActivity" />
-
-        </config-file>
+        
 
         <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
 
