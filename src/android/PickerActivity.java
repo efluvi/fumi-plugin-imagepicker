@@ -153,7 +153,7 @@ public class PickerActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater  inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_bar, menu);
+        inflater.inflate(getResources().getIdentifier("action_bar", "menu", getPackageName()), menu);
         for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
