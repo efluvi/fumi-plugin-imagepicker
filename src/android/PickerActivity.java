@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,11 +41,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PickerActivity extends Activity {
 
-    private static String LOG = "log";
     private ArrayList<Pair<String, String>> imageInfo;
 
     private int loadMoreCount = 0;
@@ -62,6 +63,7 @@ public class PickerActivity extends Activity {
 
     private Bitmap changedBitmap;
 
+    private boolean onlySingleMode = false;
     private boolean isMultiMode = false;
 
     private boolean isSnappedToCenter = false;
@@ -69,6 +71,7 @@ public class PickerActivity extends Activity {
     private ArrayList<Integer> selectedPositions = new ArrayList<>();
     private ArrayList<CropMatrix> selectedImagesState = new ArrayList<>();
     private ArrayList<CropResult> selectedImagesInfo = new ArrayList<>();
+    private ArrayList<String> savedFilePath = new ArrayList<>();
 
     ImagePickerGridView imagePickerGridView;
 
@@ -77,6 +80,11 @@ public class PickerActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(getResources().getIdentifier("picker_activity", "layout", getPackageName()));
+
+        Intent intent = getIntent();
+        String name = intent.getExtras().getString("mode");
+        if( name.equals("multiple"))
+            onlySingleMode = false;
 
         //Check Permission
         this.checkPermission();
@@ -96,6 +104,10 @@ public class PickerActivity extends Activity {
         selectedPositions.clear();
         selectedImagesState.clear();
         selectedImagesInfo.clear();
+        savedFilePath.clear();
+        selectedPosition = 0;
+
+        loadMoreCount = 0;
         uploadedCount = 0;
 
         adapter = new ImageAdapter(this);
@@ -148,6 +160,7 @@ public class PickerActivity extends Activity {
         snapImageView.setOnClickListener(v -> snapImage());
         rotateImageView.setOnClickListener(v -> rotateImage());
         multiImageView.setOnClickListener(v -> multiMode());
+        multiImageView.setVisibility(onlySingleMode ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -314,6 +327,9 @@ public class PickerActivity extends Activity {
     }
 
     private void multiMode() {
+        if(onlySingleMode)
+            return;
+
         // multi mode가 아닌 상태에서 click
         if (isMultiMode) {
             selectedPositions.clear();
@@ -340,7 +356,7 @@ public class PickerActivity extends Activity {
                     selectedPosition = position;
                 }
             } else {
-                if (selectedPositions.size() < 10) {
+                if (selectedPositions.size() < 9) {
                     selectedPositions.add(position);
                     addCropState();
                     selectedPosition = position;
@@ -384,7 +400,7 @@ public class PickerActivity extends Activity {
     }
 
     private void uploadImages() {
-        if (isMultiMode)
+        if (!onlySingleMode && isMultiMode)
             uploadMultipleImages();
         else
             uploadOneImage();
@@ -400,7 +416,7 @@ public class PickerActivity extends Activity {
             int finalI = i;
             task.setOnPostFinishedListener((bitmap) -> {
                 Cropper cropper = new Cropper(selectedImagesInfo.get(finalI).getCropInfo(), bitmap);
-                cropper.crop(cropCallbaack());
+                cropper.crop(cropCallback());
             });
             task.execute(imageInfo.get(selectedPositions.get(i)).first);
         }
@@ -411,54 +427,56 @@ public class PickerActivity extends Activity {
         ImagePickerBitmapLoader task = new ImagePickerBitmapLoader();
         task.setOnPostFinishedListener((bitmap) -> {
             Cropper cropper = new Cropper(cropInfo, bitmap);
-            cropper.crop(cropCallbaack());
+            cropper.crop(cropCallback());
         });
         task.execute(imageInfo.get(selectedPosition).first);
     }
 
-    public CropperCallback cropCallbaack() {
+    public CropperCallback cropCallback() {
         return new CropperCallback() {
             @Override
             public void onCropped(Bitmap bitmap) {
                 try {
                     String filePath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + Long.toString(Calendar.getInstance().getTimeInMillis()) + ".png";
+                    savedFilePath.add(filePath);
                     ImagePickerUtil.writeBitmapToFile(bitmap, new File(filePath), 100);
                     uploadedCount++;
-                    finishActivity();
+                    finishProcess();
                 } catch( IOException e) {
                     e.printStackTrace();
+                    finishActivity("fail", e.getMessage(), 0, null);
                 }
             }
 
             @Override
             public void onError() {
-                //need to delete uploaded tmpFile;
+                finishActivity("fail", "Error while Cropping", 0, null);
                 finish();
             }
         };
     }
 
-    public void finishActivity() {
-        if ( selectedPositions.size() != uploadedCount || selectedPositions.size() == 0)
-            return;
-        Intent intent = new Intent();
-//        intent.putExtra("response", new Response("success", "", uploadedCount, ));
+    public void finishProcess() {
+        if (isMultiMode) {
+            if (selectedPositions.size() != uploadedCount) {
+                finishActivity("success", "", uploadedCount, savedFilePath);
+            }
+        } else {
+            Intent intent = new Intent();
+            finishActivity("success", "", 1, savedFilePath);
+        }
+    }
 
+    public void finishActivity(String result, String error, int count, ArrayList<String> path){
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("result", result);
+        response.put("error", error);
+        response.put("count", count);
+        response.put("path", path);
+        Intent intent = new Intent();
+
+        intent.putExtra("result", response.toString());
         setResult(RESULT_OK, intent);
         finish();
     }
-
-//    public class Response{
-//        private String result;
-//        private String message;
-//        private int count;
-//        private String[] path;
-//
-//        public Response(String result, String message, int count, String[] path){
-//            this.result = result;
-//            this.message = message;
-//            this.count = count;
-//            this.path = path;
-//        }
-//    }
 }

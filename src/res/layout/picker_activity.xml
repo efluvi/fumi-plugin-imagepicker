@@ -60,7 +60,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/rotate"
         app:layout_constraintBottom_toBottomOf="@id/image_crop_view"
-        app:layout_constraintRight_toLeftOf="@id/multi_button" />
+        app:layout_constraintLeft_toRightOf="@id/snap_button" />
 
     <com.fumi.imagePicker.ImagePickerGridView
         android:id="@+id/gallery_grid_view"
