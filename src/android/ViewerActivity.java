@@ -24,10 +24,10 @@ public class ViewerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.picker_activity);
+        setContentView(getResources().getIdentifier("picker_activity", "layout", getPackageName()));
 
 
-        imagePickerGridView = findViewById(R.id.gallery_grid_view);
+        imagePickerGridView = findViewById(getResources().getIdentifier("gallery_grid_view", "id", getPackageName()));
     }
 
     @Override

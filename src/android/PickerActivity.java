@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -74,17 +75,18 @@ public class PickerActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.picker_activity);
+
+        setContentView(getResources().getIdentifier("picker_activity", "layout", getPackageName()));
 
         //Check Permission
         this.checkPermission();
 
-        cropperView = findViewById(R.id.image_crop_view);
-        snapImageView = findViewById(R.id.snap_button);
-        rotateImageView = findViewById(R.id.rotate_button);
-        multiImageView = findViewById(R.id.multi_button);
-        imagePickerGridView = findViewById(R.id.gallery_grid_view);
-        progressBar = findViewById(R.id.progress_bar);
+        cropperView = findViewById(getResources().getIdentifier("image_crop_view", "id", getPackageName()));
+        snapImageView = findViewById(getResources().getIdentifier("snap_button", "id", getPackageName()));
+        rotateImageView = findViewById(getResources().getIdentifier("rotate_button", "id", getPackageName()));
+        multiImageView = findViewById(getResources().getIdentifier("multi_button", "id", getPackageName()));
+        imagePickerGridView = findViewById(getResources().getIdentifier("gallery_grid_view", "id", getPackageName()));
+        progressBar = findViewById(getResources().getIdentifier("progress_bar", "id", getPackageName()));
     }
 
     @Override
@@ -161,11 +163,11 @@ public class PickerActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.next_btn) {
+        if (itemId == getResources().getIdentifier("next_btn", "id", getPackageName())) {
             progressBar.setVisibility(View.VISIBLE);
             uploadImages();
             return true;
-        } else if (itemId == R.id.test_btn) {
+        } else if (itemId == getResources().getIdentifier("test_btn", "id", getPackageName())) {
             Intent intent1 = new Intent(this, ViewerActivity.class);
             startActivity(intent1);
             return true;

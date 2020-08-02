@@ -18,9 +18,11 @@ public class ImagePickerGridItem extends ConstraintLayout {
 
     public ImagePickerGridItem(Context context) {
         super(context);
-        View view = LayoutInflater.from(context).inflate(R.layout.grid_item, this);
-        imageView = findViewById(R.id.imageView);
-        selector = findViewById(R.id.selector);
+
+
+        View view = LayoutInflater.from(context).inflate(getResources().getIdentifier("grid_item", "layout", context.getPackageName()), this);
+        imageView = findViewById(getResources().getIdentifier("imageView", "id", context.getPackageName()));
+        selector = findViewById(getResources().getIdentifier("selector", "id", context.getPackageName()));
     }
 
     public void setScaleType(ImageView.ScaleType type){
