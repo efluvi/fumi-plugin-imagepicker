@@ -20,7 +20,6 @@ public class ImagePickerGridView extends GridView implements AbsListView.OnScrol
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
     }
 
     @Override

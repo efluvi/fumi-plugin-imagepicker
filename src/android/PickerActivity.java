@@ -2,6 +2,7 @@ package com.fumi.imagePicker;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -55,7 +56,6 @@ public class PickerActivity extends Activity {
 
     CropperView cropperView;
     ImageView snapImageView;
-    ImageView rotateImageView;
     ImageView multiImageView;
     ProgressBar progressBar;
 
@@ -63,7 +63,7 @@ public class PickerActivity extends Activity {
 
     private Bitmap changedBitmap;
 
-    private boolean onlySingleMode = ture;
+    private boolean onlySingleMode = false;
     private boolean isMultiMode = false;
 
     private boolean isSnappedToCenter = false;
@@ -91,7 +91,6 @@ public class PickerActivity extends Activity {
 
         cropperView = findViewById(getResources().getIdentifier("image_crop_view", "id", getPackageName()));
         snapImageView = findViewById(getResources().getIdentifier("snap_button", "id", getPackageName()));
-        rotateImageView = findViewById(getResources().getIdentifier("rotate_button", "id", getPackageName()));
         multiImageView = findViewById(getResources().getIdentifier("multi_button", "id", getPackageName()));
         imagePickerGridView = findViewById(getResources().getIdentifier("gallery_grid_view", "id", getPackageName()));
         progressBar = findViewById(getResources().getIdentifier("progress_bar", "id", getPackageName()));
@@ -117,6 +116,7 @@ public class PickerActivity extends Activity {
         if (imageInfo.isEmpty())
             return;
 
+
         //첫 로딩
         ImagePickerBitmapLoader firstLoading = new ImagePickerBitmapLoader(cropperView, null);
         firstLoading.setOnPostFinishedListener((bitmap) -> {
@@ -129,11 +129,13 @@ public class PickerActivity extends Activity {
         imagePickerGridView.setAdapter(adapter);
         imagePickerGridView.setOnItemClickListener((adapter, view, position, id) -> {
             setSelection(view, position);
+            Log.d("Test1", Integer.toString(position));
 
             int index = selectedPositions.indexOf(new Integer(selectedPosition));
             CropMatrix matrix = ((index != -1) && (index< selectedImagesState.size())) ? selectedImagesState.get(index) : null;
 
             ImagePickerBitmapLoader task = new ImagePickerBitmapLoader(cropperView, matrix);
+            
             task.setOnPostFinishedListener((bitmap) -> {
                 changedBitmap = bitmap;
             });
@@ -158,7 +160,6 @@ public class PickerActivity extends Activity {
 
         //Button Event
         snapImageView.setOnClickListener(v -> snapImage());
-        rotateImageView.setOnClickListener(v -> rotateImage());
         multiImageView.setOnClickListener(v -> multiMode());
         multiImageView.setVisibility(onlySingleMode ? View.INVISIBLE : View.VISIBLE);
     }
@@ -180,11 +181,12 @@ public class PickerActivity extends Activity {
             progressBar.setVisibility(View.VISIBLE);
             uploadImages();
             return true;
-        } else if (itemId == getResources().getIdentifier("test_btn", "id", getPackageName())) {
-            Intent intent1 = new Intent(this, ViewerActivity.class);
-            startActivity(intent1);
-            return true;
-        }
+        } 
+        // else if (itemId == getResources().getIdentifier("test_btn", "id", getPackageName())) {
+        //     Intent intent1 = new Intent(this, ViewerActivity.class);
+        //     startActivity(intent1);
+        //     return true;
+        // }
         return super.onOptionsItemSelected(item);
     }
 
@@ -334,7 +336,7 @@ public class PickerActivity extends Activity {
         if (isMultiMode) {
             selectedPositions.clear();
             selectedImagesState.clear();
-            selectedImagesState.clear();
+            selectedImagesInfo.clear();
         }
 
         isMultiMode = !isMultiMode;
@@ -357,18 +359,19 @@ public class PickerActivity extends Activity {
                 }
             } else {
                 if (selectedPositions.size() < 9) {
+
                     selectedPositions.add(position);
-                    addCropState();
+                    if ( selectedPositions.size() > 1 )
+                        addCropState();
                     selectedPosition = position;
+                } else {
+                    return;
                 }
             }
-
+            adapter.notifyDataSetChanged();
         } else {
             selectedPosition = position;
-
         }
-
-        adapter.notifyDataSetChanged();
     }
 
     private void removeCropState() {
@@ -386,12 +389,14 @@ public class PickerActivity extends Activity {
             selectedImagesInfo.set(index, cropperView.getCropInfo());
         }
         else {
+            Log.d("Test11", "addddddddd");
             selectedImagesState.add(cropperView.getCropMatrix());
             selectedImagesInfo.add(cropperView.getCropInfo());
         }
     }
 
     private void addCropState() {
+        Log.d("Test11", "addddd");
         int index = selectedPositions.indexOf(selectedPosition);
         if (selectedImagesState.size() == index && index != -1) {
             selectedImagesState.add(cropperView.getCropMatrix());
