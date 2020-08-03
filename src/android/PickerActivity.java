@@ -63,7 +63,7 @@ public class PickerActivity extends Activity {
 
     private Bitmap changedBitmap;
 
-    private boolean onlySingleMode = false;
+    private boolean onlySingleMode = ture;
     private boolean isMultiMode = false;
 
     private boolean isSnappedToCenter = false;
@@ -458,7 +458,7 @@ public class PickerActivity extends Activity {
 
     public void finishProcess() {
         if (isMultiMode) {
-            if (selectedPositions.size() != uploadedCount) {
+            if (selectedPositions.size() == uploadedCount) {
                 finishActivity("success", "", uploadedCount, savedFilePath);
             }
         } else {
